@@ -2,15 +2,21 @@ package org.example;
 
 
 public class Cell {
-    public boolean isMined() {
-        return isMined;
-    }
-
     private  boolean isMined;
     private boolean isFlagged = false;
     private boolean isReveald = false;
 
     int neigbours;
+
+    public Cell(boolean isMined){
+        this.isMined = isMined;
+    }
+
+    public boolean isMined() {
+        return isMined;
+    }
+
+
 
     public boolean isFlagged() {
         return isFlagged;
@@ -29,7 +35,5 @@ public class Cell {
     }
 
 
-    public Cell(boolean isMined){
-        this.isMined = isMined;
-    }
+
 }

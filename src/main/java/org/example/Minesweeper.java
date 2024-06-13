@@ -9,7 +9,10 @@ public class Minesweeper {
     private int number;
     private int size;
     private Raylib.Vector2 mousePos;
-
+    private boolean gameStart =false;
+    private boolean firstClick = true;
+    private boolean gameOver;
+    private boolean gameWon;
     private Cell[][] grid;
 
     public Minesweeper() {
@@ -17,7 +20,7 @@ public class Minesweeper {
 
     public void init(int windowWidth, int WindowHeight) {
         InitWindow(windowWidth, WindowHeight, "Minesweeper");
-        CellRenderer.debugMode = false;
+        CellRenderer.debugMode = true;
 
     }
 
@@ -25,8 +28,12 @@ public class Minesweeper {
     public void run(int cells) {
         number = cells;
         size = GetScreenWidth() / number;
-
+        gameOver = false;
+        gameWon = false;
+        gameStart=false;
+        firstClick = false;
         populateGrid(cells);
+        firstClick = true;
 
         while (!WindowShouldClose()) {
             processInput();
@@ -36,18 +43,43 @@ public class Minesweeper {
 
 
     private void draw() {
+        int textSize = 200;
+        int textHeight = textSize*2;
+        Raylib.Color textColour = RED;
+        rlClearScreenBuffers();
         BeginDrawing();
 
-        drawGrid();
+            drawGrid();
+
+        if(gameOver) {
+            textColour = RED;
+            String topText = "GAME";
+            String bottomText = "OVER";
+            if(gameWon){
+                textColour = GREEN;
+                textSize = 100;
+                textHeight = textSize;
+                topText = "YOU WON";
+                bottomText = "";
+            }
+
+
+            int textWidth = MeasureText(topText,textSize);
+            int textWidth2 = MeasureText(bottomText,textSize);
+
+            DrawText(topText,(GetScreenWidth() - textWidth)/2,(GetScreenHeight()-textHeight)/2,textSize,textColour);
+
+            DrawText(bottomText,(GetScreenWidth() - textWidth2)/2,(GetScreenHeight()-textHeight)/2 + textSize,textSize,textColour);
+
+        }
+
 
         EndDrawing();
     }
 
     private void drawGrid() {
-        int borderThinkness = 4;
 
-        int spacing = size;
-        CellRenderer.spacing = spacing;
+        CellRenderer.spacing = size;
         CellRenderer.borderThinkness = 4;
 
         for (int x = 0; x < number; x++) {
@@ -65,63 +97,86 @@ public class Minesweeper {
         Raylib.Vector2 cellIndex = pixelToGrid(mousePos);
         Cell c = grid[(int) cellIndex.x()][(int) cellIndex.y()];
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            reavelCell((int) cellIndex.x(), (int) cellIndex.y());
+            if(!gameStart){
+                gameStart = true;
+                if(grid[(int)cellIndex.x()][(int) cellIndex.y()].isMined())
+                    populateGrid(number);
+            }
+            revealCell((int) cellIndex.x(), (int) cellIndex.y());
+            firstClick = false;
+            //return;
         }
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+            if(!gameStart)
+                return;
             c.setFlagged(!c.isFlagged());
         }
+
+
 
     }
 
     private void populateGrid(int cells) {
         grid = new Cell[cells][cells];
 
-        double random = Math.random() * 100;
+        double random;
 
 
         for (int i = 0; i < cells; i++) {
             for (int j = 0; j < cells; j++) {
                 random = Math.random() * 100;
-                grid[i][j] = new Cell(random < 20 ? true : false);
+                grid[i][j] = new Cell(random < 20);
+                if(firstClick){
+                    Raylib.Vector2 cellIndex = pixelToGrid(mousePos);
+
+                    if( ((int) cellIndex.x()) ==i && (int) cellIndex.y()==j)
+                        grid[i][j] = new Cell( false);
+                }
+
             }
         }
 
         for (int i = 0; i < cells; i++) {
             for (int j = 0; j < cells; j++) {
-                int count = 0;
 
-                if (i + 1 < cells) count += grid[i + 1][j].isMined() ? 1 : 0;
-                if (j + 1 < cells) count += grid[i][j + 1].isMined() ? 1 : 0;
-                if (i + 1 < cells && j + 1 < cells) count += grid[i + 1][j + 1].isMined() ? 1 : 0;
-                if (i - 1 >= 0) count += grid[i - 1][j].isMined() ? 1 : 0;
-                if (j - 1 >= 0) count += grid[i][j - 1].isMined() ? 1 : 0;
-                if (i - 1 >= 0 && j - 1 >= 0) count += grid[i - 1][j - 1].isMined() ? 1 : 0;
-                if (i - 1 >= 0 && j + 1 < cells) count += grid[i - 1][j + 1].isMined() ? 1 : 0;
-                if (i + 1 < cells && j - 1 >= 0) count += grid[i + 1][j - 1].isMined() ? 1 : 0;
-
-                grid[i][j].neigbours = count;
+                grid[i][j].neigbours = calculateNeighbours(cells, i, j);
             }
         }
 
     }
 
+    private int calculateNeighbours(int cells, int i, int j) {
+        int count = 0;
 
-    private Raylib.Vector2 pixelToGrid(Raylib.Vector2 screenCordinates) {
+        if (i + 1 < cells) count += grid[i + 1][j].isMined() ? 1 : 0;
+        if (j + 1 < cells) count += grid[i][j + 1].isMined() ? 1 : 0;
+        if (i + 1 < cells && j + 1 < cells) count += grid[i + 1][j + 1].isMined() ? 1 : 0;
+        if (i - 1 >= 0) count += grid[i - 1][j].isMined() ? 1 : 0;
+        if (j - 1 >= 0) count += grid[i][j - 1].isMined() ? 1 : 0;
+        if (i - 1 >= 0 && j - 1 >= 0) count += grid[i - 1][j - 1].isMined() ? 1 : 0;
+        if (i - 1 >= 0 && j + 1 < cells) count += grid[i - 1][j + 1].isMined() ? 1 : 0;
+        if (i + 1 < cells && j - 1 >= 0) count += grid[i + 1][j - 1].isMined() ? 1 : 0;
+        return count;
+    }
+
+
+    private Raylib.Vector2 pixelToGrid(Raylib.Vector2 screenCoordinates) {
         Raylib.Vector2 gridCords = new Raylib.Vector2();
-        gridCords.x((float) Math.floor((screenCordinates.x() / size)));
-        gridCords.y((float) Math.floor((screenCordinates.y() / size)));
+        gridCords.x((float) Math.floor((screenCoordinates.x() / size)));
+        gridCords.y((float) Math.floor((screenCoordinates.y() / size)));
         return gridCords;
 
     }
 
 
-    private void reavelCell(int x, int y) {
+    private void revealCell(int x, int y) {
         Cell c = grid[x][y];
         if (!c.isMined() && !c.isReveald() && !c.isFlagged())
             floodFill(x, y);
         if(c.isMined()){
             c.setReveald(true);
+            gameOver = true;
         }
     }
 

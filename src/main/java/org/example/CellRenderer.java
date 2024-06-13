@@ -11,6 +11,7 @@ public class CellRenderer {
     static Raylib.Color revealColour = WHITE;
     static Raylib.Color hidenColour = GRAY;
     static Raylib.Color textColour = BLUE;
+    static int textSize = 30;
     static int borderThinkness = 4;
     static boolean debugMode = false;
     static Texture duckTexture = LoadTexture("Assets/duck.png");
@@ -38,7 +39,11 @@ public class CellRenderer {
         if(isFlagged){
             DrawTexture(duckTexture,xPos + leftBorder,yPos + topBorder,WHITE );
         }
+
+        int textWidth = MeasureText(String.valueOf(neighbours),textSize);
+
+
         if((isRevealed || debugMode) && neighbours>0 && !isMined)
-        DrawText(String.valueOf(neighbours),(xPos + leftBorder)+spacing/2,(yPos + topBorder) + spacing/2,30, textColour);
+        DrawText(String.valueOf(neighbours),(xPos + leftBorder)+(spacing - textWidth)/2,(yPos + topBorder) + (spacing-textSize)/2,textSize, textColour);
     }
 }
