@@ -18,6 +18,8 @@ public class Minesweeper {
 
     private Grid grid;
 
+    private boolean consoleMode;
+
     public static final String name = "Minesweeper";
 
 
@@ -31,6 +33,10 @@ public class Minesweeper {
 
     }
 
+
+    public void setConsoleMode(boolean consoleMode) {
+        this.consoleMode = consoleMode;
+    }
 
 
     public boolean isGameStart() {
@@ -70,13 +76,19 @@ public class Minesweeper {
 
 
     public void draw() {
+
+        if(consoleMode){
+            grid.draw(false);
+            return;
+        }
+
         int textSize = 200;
         int textHeight = textSize*2;
         Raylib.Color textColour = RED;
         rlClearScreenBuffers();
         BeginDrawing();
 
-            grid.draw();
+            grid.draw(true);
 
         if(gameEnd) {
             textColour = RED;

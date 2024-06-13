@@ -5,6 +5,7 @@ public class Main {
 
         GameController controller = new GameController();
         controller.init(800,800,10);
+        //controller.init(10);
         controller.begin();
 
     }

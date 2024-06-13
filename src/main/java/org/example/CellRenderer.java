@@ -14,7 +14,11 @@ public class CellRenderer {
     static int textSize = 30;
     static int borderThinkness = 4;
     static boolean debugMode = false;
-    static Texture duckTexture = LoadTexture("Assets/duck.png");
+    static Texture duckTexture;
+
+    public static void init(){
+        duckTexture = LoadTexture("Assets/duck.png");
+    }
 
     static void drawCell(int x,int y,int neighbours,boolean isFlagged, boolean isRevealed,boolean isMined, boolean hovering){
         int xPos = x*spacing;

@@ -22,8 +22,15 @@ public class Grid {
         return columns;
     }
 
-    public void draw() {
+    public void draw(boolean drawWindowed) {
+        if(drawWindowed)
+            drawWindow();
+        else
+            drawConsole();
 
+    }
+
+    private void drawWindow(){
         for (int x = 0; x < columns; x++) {
 
             for (int y = 0; y < rows; y++) {
@@ -36,13 +43,16 @@ public class Grid {
             }
 
         }
+    }
+
+    private void drawConsole(){
         char[] renderListTop = new char[columns+1];
         for(int i = 0; i<columns; i++){
             if(i==0)
                 renderListTop[i] = ' ';
             renderListTop[i+1] = (char)(i+'0');
         }
-        printRow(renderListTop);
+        ConsoleRenderer.printRow(renderListTop);
         for (int y = 0; y < rows; y++){
             char[] renderList = new char[columns+1];
             renderList[0]= (char) (y + '0');
@@ -59,28 +69,11 @@ public class Grid {
                         renderList[x+1]= c.neigbours>0 ? (char) (c.neigbours + '0') : ' ';
                 }
             }
-            printRow(renderList);
+            ConsoleRenderer.printRow(renderList);
         }
 
-        System.exit(0);
     }
-    public static void printRow(char[] chars){
-        int width = chars.length*11;
-        int columns = chars.length;
-        width -=4;
-        for (int i = 0; i < width; i++) {
-            System.out.print("-");
-        }
-        System.out.println("");
-        for(int i = 0; i < columns ;i++) {
-            System.out.printf(String.format("%-5s%-5s", "|", chars[i]));
-        }
-        System.out.print("|");
-        System.out.println("");
-        /*for (int i = 0; i < width; i++) {
-            System.out.print("-");
-        }*/
-    }
+
 
     public void populateGrid() {
         cells = new Cell[rows][columns];
