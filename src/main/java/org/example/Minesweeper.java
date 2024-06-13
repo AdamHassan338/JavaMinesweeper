@@ -26,6 +26,12 @@ public class Minesweeper {
     public Minesweeper() {
     }
 
+    public Raylib.Vector2 getGridDimentions() {
+        Raylib.Vector2 v = new Raylib.Vector2();
+        v.x(grid.getColumns());
+        v.y(grid.getRows());
+        return v;
+    }
 
     public void setMousePos(Raylib.Vector2 mousePos) {
         this.mousePos = mousePos;
@@ -51,6 +57,10 @@ public class Minesweeper {
 
     public boolean isGameEnd() {
         return gameEnd;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
     }
 
 

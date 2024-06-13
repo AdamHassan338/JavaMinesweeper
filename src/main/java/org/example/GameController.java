@@ -8,7 +8,7 @@ import static com.raylib.Raylib.*;
 
 public class GameController {
     private Minesweeper game;
-    private Raylib.Vector2 mousePos;
+    private Vector2 mousePos;
     private boolean enableUI;
     private Scanner sc;
 
@@ -46,8 +46,9 @@ public class GameController {
             }
         }else{
             while(true) {
-                processInput();
                 game.draw();
+                processInput();
+
             }
         }
 
@@ -56,21 +57,104 @@ public class GameController {
 
 
     private void processInput() {
-        mousePos = GetMousePosition();
-        game.setMousePos(mousePos);
-        if(game.isGameEnd())
-            return;
-        Raylib.Vector2 cellIndex = game.pixelToGrid(mousePos);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            game.intertactGrid((int) cellIndex.x(), (int) cellIndex.y(), Minesweeper.Action.reveal);
+        Vector2 cellIndex;
+        Minesweeper.Action action = null;
 
+        if(!enableUI){
+
+            if(game.isGameEnd()){
+                System.out.println("");
+                if(game.isGameWon())
+                    System.out.println("YOU WON");
+                else
+                    System.out.println("YOU LOST");
+                System.exit(0);
+            }
+
+            System.out.println("");
+            action =  getAction();
+            cellIndex = getCoordinate();
+
+        }else{
+            mousePos = GetMousePosition();
+            game.setMousePos(mousePos);
+            if(game.isGameEnd())
+                return;
+            cellIndex = game.pixelToGrid(mousePos);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                action = Minesweeper.Action.reveal;
+
+            }
+
+            if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+                action = Minesweeper.Action.toggleFlag;
+
+            }
         }
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            game.intertactGrid((int) cellIndex.x(), (int) cellIndex.y(), Minesweeper.Action.toggleFlag);
-
+        try{
+            game.intertactGrid((int) cellIndex.x(), (int) cellIndex.y(), action);
+        }catch (Exception e){
+            //action is uninitalised for the first game loop when in Window mode
+            //do nothing is fine
         }
 
+
+    }
+
+    private Minesweeper.Action getAction(){
+        while(true){
+            System.out.println("");
+            System.out.print("Enter action to take, R (reveal a cell) or F (flag/unflag a cell): ");
+            String responce = sc.nextLine();
+            System.out.println("");
+            switch (responce.toUpperCase()){
+                case "R":
+                    return Minesweeper.Action.reveal;
+                case "F":
+                    if(!game.isGameStart()) {
+                        System.out.println("FIRST MOVE MUST BE A REVEAL");
+                        break;
+                    }
+                    return Minesweeper.Action.toggleFlag;
+                default:
+                    System.out.println("RESPONSE INVALID");
+                    break;
+            }
+        }
+    }
+
+    private Vector2 getCoordinate() {
+        while (true) {
+            System.out.println("");
+            System.out.print("Enter the Coordinate of the cell you wish to select, Format 'x,y': ");
+            String responce = sc.nextLine();
+            String[] coords = responce.split(",");
+
+            System.out.println("");
+
+            if (coords.length != 2) {
+                System.out.println("RESPONSE INVALID, TOO LONG");
+            } else {
+                try {
+                    int x = Integer.parseInt(coords[0].trim());
+                    int y = Integer.parseInt(coords[1].trim());
+                    if (x < 0 || y < 0) {
+                        System.out.println("RESPONSE INVALID, NEGATIVE NUMBER");
+                    }else if(x>=game.getGridDimentions().x() || y >= game.getGridDimentions().y()){
+                        System.out.println("RESPONSE INVALID, COORDINATES NOT ON GRID");
+                    }else {
+                        Vector2 v = new Vector2();
+                        v.x(x);
+                        v.y(y);
+                        return v;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("RESPONSE INVALID");
+                }
+
+            }
+        }
     }
 
 }

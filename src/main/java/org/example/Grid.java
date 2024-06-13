@@ -60,7 +60,7 @@ public class Grid {
                 Cell c = cells[x][y];
                 if(c.isFlagged()) {
                     renderList[x + 1] = 'F';
-                    continue;
+
                 }
                 if(c.isReveald()){
                     if(c.isMined())
