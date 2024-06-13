@@ -146,6 +146,8 @@ public class Minesweeper {
                 if(!isGameStart())
                     return;
                 Cell c = grid.cellAt(x,y);
+                if(c.isReveald())
+                    break;
                 c.setFlagged(!c.isFlagged());
                 break;
         }
