@@ -15,7 +15,8 @@ public class CellRenderer {
     static int borderThinkness = 4;
     static boolean debugMode = false;
     static Texture duckTexture = LoadTexture("Assets/duck.png");
-    static void drawCell(int x,int y,int neighbours,boolean isFlagged, boolean isRevealed,boolean isMined){
+
+    static void drawCell(int x,int y,int neighbours,boolean isFlagged, boolean isRevealed,boolean isMined, boolean hovering){
         int xPos = x*spacing;
         int yPos = y * spacing;
         int topBorder = y==0 ? borderThinkness : 0;
@@ -30,6 +31,18 @@ public class CellRenderer {
 
         if(debugMode && isMined)
             colour = mineColour;
+        if(hovering && !isRevealed){
+            Vector4 temp = new Vector4();
+            temp.x((colour.r()*.5f)/255.f);
+            temp.y((colour.g()*.5f)/255.f);
+            temp.z((colour.b()*.5f)/255.f);
+            temp.w(colour.a()/255.f);
+            colour = ColorFromNormalized(temp);
+
+
+
+        }
+
 
         //draw outline
         DrawRectangle(xPos , yPos , spacing, spacing , lineColour);
@@ -37,7 +50,7 @@ public class CellRenderer {
         //Draw inside
         DrawRectangle(xPos + leftBorder , yPos + topBorder, spacing - leftBorder- borderThinkness , spacing- topBorder- borderThinkness, colour);
         if(isFlagged){
-            DrawTexture(duckTexture,xPos + leftBorder,yPos + topBorder,WHITE );
+            DrawTexture(duckTexture,xPos + leftBorder +(spacing-duckTexture.width())/2,yPos + topBorder + +(spacing-duckTexture.height())/2,WHITE );
         }
 
         int textWidth = MeasureText(String.valueOf(neighbours),textSize);

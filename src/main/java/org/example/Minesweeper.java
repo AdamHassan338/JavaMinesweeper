@@ -5,29 +5,57 @@ import static com.raylib.Jaylib.*;
 
 
 public class Minesweeper {
-
-    private int number;
+    public enum Action{
+        reveal,
+        toggleFlag
+    }
+    private  Raylib.Vector2 mousePos;
     private int size;
-    private Raylib.Vector2 mousePos;
     private boolean gameStart =false;
+
     private boolean gameEnd;
     private boolean gameWon;
 
     private Grid grid;
 
+    public static final String name = "Minesweeper";
+
+
     public Minesweeper() {
     }
 
-    public void init(int windowWidth, int WindowHeight) {
-        InitWindow(windowWidth, WindowHeight, "Minesweeper");
-        CellRenderer.debugMode = true;
+
+    public void setMousePos(Raylib.Vector2 mousePos) {
+        this.mousePos = mousePos;
+        grid.hoverIndex = pixelToGrid(mousePos);
 
     }
 
 
 
+    public boolean isGameStart() {
+        return gameStart;
+    }
 
-    public void run(int cells) {
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
+
+
+
+    public boolean isGameEnd() {
+        return gameEnd;
+    }
+
+
+    public void endGame(boolean win){
+        if(win)
+            gameWon = true;
+        gameEnd = true;
+    }
+
+
+    public void init(int cells) {
         grid = new Grid(cells,cells);
         size = GetScreenWidth() / cells;
         CellRenderer.spacing = size;
@@ -35,15 +63,13 @@ public class Minesweeper {
         gameWon = false;
         gameStart=false;
         grid.populateGrid();
+        mousePos = new Raylib.Vector2();
 
-        while (!WindowShouldClose()) {
-            processInput();
-            draw();
-        }
+
     }
 
 
-    private void draw() {
+    public void draw() {
         int textSize = 200;
         int textHeight = textSize*2;
         Raylib.Color textColour = RED;
@@ -78,62 +104,38 @@ public class Minesweeper {
         EndDrawing();
     }
 
+    public void intertactGrid(int x, int y, Action action){
+        switch (action){
+            case reveal:
+                if(!isGameStart()){
+                    setGameStart(true);
+                    if(grid.cellAt(x,y).isMined())
+                        grid.populateGrid();
+                }
 
-
-
-    private void processInput() {
-        mousePos = GetMousePosition();
-        if(gameEnd)
-            return;
-        Raylib.Vector2 cellIndex = pixelToGrid(mousePos);
-        Cell c = grid.cellAt((int) cellIndex.x(),(int) cellIndex.y());
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if(!gameStart){
-                gameStart = true;
-                if(grid.cellAt((int)cellIndex.x(),(int) cellIndex.y()).isMined())
-                    grid.populateGrid();
-            }
-
-            if(!grid.revealCell((int) cellIndex.x(), (int) cellIndex.y())){
-                gameEnd = true;
-            }
-            if(!grid.isCellsLeft()){
-                gameWon = true;
-                gameEnd = true;
-            }
-            //return;
+                if(!grid.revealCell(x,y)){
+                    endGame(false);
+                }
+                if(!grid.isCellsLeft()){
+                    endGame(true);
+                }
+                break;
+            case toggleFlag:
+                if(!isGameStart())
+                    return;
+                Cell c = grid.cellAt(x,y);
+                c.setFlagged(!c.isFlagged());
+                break;
         }
-
-        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            if(!gameStart)
-                return;
-            c.setFlagged(!c.isFlagged());
-        }
-
-
-
     }
 
-
-
-
-
-    private Raylib.Vector2 pixelToGrid(Raylib.Vector2 screenCoordinates) {
+    public Raylib.Vector2 pixelToGrid(Raylib.Vector2 screenCoordinates) {
         Raylib.Vector2 gridCords = new Raylib.Vector2();
         gridCords.x((float) Math.floor((screenCoordinates.x() / size)));
         gridCords.y((float) Math.floor((screenCoordinates.y() / size)));
         return gridCords;
 
     }
-
-
-
-
-
-
-
-
-
 
 
 

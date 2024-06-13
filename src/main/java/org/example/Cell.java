@@ -7,6 +7,7 @@ public class Cell {
     private boolean isReveald = false;
 
 
+
     int x;
     int y;
 

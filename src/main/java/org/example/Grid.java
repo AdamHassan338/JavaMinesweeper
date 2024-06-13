@@ -1,11 +1,13 @@
 package org.example;
 
 
+import com.raylib.Raylib;
+
 public class Grid {
     private int rows;
     private int columns;
     private Cell[][] cells;
-
+    Raylib.Vector2 hoverIndex;
 
     public Grid(int rows, int columns){
         this.columns = columns;
@@ -25,7 +27,10 @@ public class Grid {
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
                 Cell c = cells[x][y];
-                CellRenderer.drawCell(x, y, c.neigbours, c.isFlagged(), c.isReveald(), c.isMined());
+                boolean hover = false;
+                if((x == (int) hoverIndex.x()) && (y == (int) hoverIndex.y()))
+                    hover = true;
+                CellRenderer.drawCell(x, y, c.neigbours, c.isFlagged(), c.isReveald(), c.isMined(),hover);
 
             }
         }
@@ -72,6 +77,8 @@ public class Grid {
         Cell c = cells[x][y];
         if (!c.isMined() && !c.isReveald() && !c.isFlagged())
             floodFill(x, y);
+        if(c.isFlagged())
+            return true;
         if(c.isMined()){
             c.setReveald(true);
             revealAllMines();
@@ -132,10 +139,9 @@ public class Grid {
         floodFill(x + 1, y - 1);
 
     }
-    /*Returns a copy*/
-    /*create copy constructor later*/
+
     public final Cell cellAt(int x, int y){
-        return new Cell(x,y,cells[x][y].isMined());
+        return cells[x][y];
     }
 
 }
