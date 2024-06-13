@@ -11,7 +11,7 @@ public class Minesweeper {
     private Raylib.Vector2 mousePos;
     private boolean gameStart =false;
     private boolean firstClick = true;
-    private boolean gameOver;
+    private boolean gameEnd;
     private boolean gameWon;
     private Cell[][] grid;
 
@@ -20,7 +20,7 @@ public class Minesweeper {
 
     public void init(int windowWidth, int WindowHeight) {
         InitWindow(windowWidth, WindowHeight, "Minesweeper");
-        CellRenderer.debugMode = true;
+        CellRenderer.debugMode = false;
 
     }
 
@@ -28,7 +28,7 @@ public class Minesweeper {
     public void run(int cells) {
         number = cells;
         size = GetScreenWidth() / number;
-        gameOver = false;
+        gameEnd = false;
         gameWon = false;
         gameStart=false;
         firstClick = false;
@@ -51,7 +51,7 @@ public class Minesweeper {
 
             drawGrid();
 
-        if(gameOver) {
+        if(gameEnd) {
             textColour = RED;
             String topText = "GAME";
             String bottomText = "OVER";
@@ -176,7 +176,12 @@ public class Minesweeper {
             floodFill(x, y);
         if(c.isMined()){
             c.setReveald(true);
-            gameOver = true;
+            gameEnd = true;
+        }
+
+        if(!isCellsLeft()){
+            gameWon = true;
+            gameEnd = true;
         }
     }
 
@@ -210,6 +215,16 @@ public class Minesweeper {
 
         floodFill(x + 1, y - 1);
 
+    }
+
+    private boolean isCellsLeft(){
+        for(Cell[] a : grid){
+            for(Cell c : a){
+                if(!c.isReveald()&&!c.isMined())
+                    return true;
+            }
+        }
+        return false;
     }
 
 
