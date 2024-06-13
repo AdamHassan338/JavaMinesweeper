@@ -2,6 +2,10 @@ package org.example;
 
 
 public class Cell {
+    public boolean isMined() {
+        return isMined;
+    }
+
     private  boolean isMined;
     private boolean isFlagged = false;
     private boolean isReveald = false;

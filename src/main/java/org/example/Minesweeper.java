@@ -1,8 +1,8 @@
 package org.example;
 
-import com.raylib.Jaylib;
 import com.raylib.Raylib;
 import static com.raylib.Jaylib.*;
+import static com.raylib.Raylib.IsMouseButtonPressed;
 
 
 public class Minesweeper {
@@ -37,34 +37,26 @@ public class Minesweeper {
 
     private void draw(){
         BeginDrawing();
+
+        drawGrid();
+
+        EndDrawing();
+    }
+
+    private void drawGrid(){
         int borderThinkness = 4;
 
         int spacing = size;
-
-        int xPos = 0;
-        int yPos = 0;
+        CellRenderer.spacing = spacing;
+        CellRenderer.borderThinkness = 4;
 
         for(int x =0 ; x<number; x++){
             for(int y =0; y<number; y++) {
-                xPos = x*spacing;
-                yPos = y * spacing;
-                int topBorder = y==0 ? borderThinkness : 0;
-                int leftBorder = x==0 ? borderThinkness : 0;
-
-                Raylib.Color colour = WHITE;
-
-                if(grid[x][y].isReveald())
-                    colour = RED;
-
-                //draw outline
-                DrawRectangle(xPos , yPos , size, size , BLACK);
-
-                //Draw inside
-                DrawRectangle(xPos + leftBorder , yPos + topBorder, size - leftBorder- borderThinkness , size- topBorder- borderThinkness, colour);
+                Cell c = grid[x][y];
+                CellRenderer.drawCell(x,y,c.isFlagged(),c.isReveald(),c.isMined());
 
             }
         }
-        EndDrawing();
     }
 
 
@@ -72,10 +64,14 @@ public class Minesweeper {
 
     private void processInput(){
         mousePos = GetMousePosition();
-
+        Raylib.Vector2 cellIndex = pixelToGrid(mousePos);
+        Cell c = grid[(int) cellIndex.x()][(int) cellIndex.y()];
         if( IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-            Raylib.Vector2 cellIndex = pixelToGrid(mousePos);
-            grid[(int) cellIndex.x()][(int) cellIndex.y()].setReveald(true);
+            c.setReveald(true);
+        }
+
+        if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)){
+            c.setFlagged(!c.isFlagged());
         }
 
     }
