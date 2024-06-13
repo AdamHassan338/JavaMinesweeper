@@ -25,6 +25,7 @@ public class Grid {
     public void draw() {
 
         for (int x = 0; x < columns; x++) {
+
             for (int y = 0; y < rows; y++) {
                 Cell c = cells[x][y];
                 boolean hover = false;
@@ -33,9 +34,53 @@ public class Grid {
                 CellRenderer.drawCell(x, y, c.neigbours, c.isFlagged(), c.isReveald(), c.isMined(),hover);
 
             }
-        }
-    }
 
+        }
+        char[] renderListTop = new char[columns+1];
+        for(int i = 0; i<columns; i++){
+            if(i==0)
+                renderListTop[i] = ' ';
+            renderListTop[i+1] = (char)(i+'0');
+        }
+        printRow(renderListTop);
+        for (int y = 0; y < rows; y++){
+            char[] renderList = new char[columns+1];
+            renderList[0]= (char) (y + '0');
+            for (int x = 0; x < columns; x++){
+                Cell c = cells[x][y];
+                if(c.isFlagged()) {
+                    renderList[x + 1] = 'F';
+                    continue;
+                }
+                if(c.isReveald()){
+                    if(c.isMined())
+                        renderList[x+1]='M';
+                    else
+                        renderList[x+1]= c.neigbours>0 ? (char) (c.neigbours + '0') : ' ';
+                }
+            }
+            printRow(renderList);
+        }
+
+        System.exit(0);
+    }
+    public static void printRow(char[] chars){
+        int width = chars.length*11;
+        int columns = chars.length;
+        width -=4;
+        for (int i = 0; i < width; i++) {
+            System.out.print("-");
+        }
+        System.out.println("");
+        for(int i = 0; i < columns ;i++) {
+            System.out.printf(String.format("%-5s%-5s", "|", chars[i]));
+        }
+        System.out.print("|");
+        System.out.println("");
+        /*for (int i = 0; i < width; i++) {
+            System.out.print("-");
+        }*/
+    }
 
     public void populateGrid() {
         cells = new Cell[rows][columns];
