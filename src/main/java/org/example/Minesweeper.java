@@ -176,6 +176,7 @@ public class Minesweeper {
             floodFill(x, y);
         if(c.isMined()){
             c.setReveald(true);
+            revealAllMines();
             gameEnd = true;
         }
 
@@ -225,6 +226,15 @@ public class Minesweeper {
             }
         }
         return false;
+    }
+
+    private  void revealAllMines(){
+        for(Cell[] a : grid){
+            for(Cell c : a){
+                if(c.isMined())
+                    c.setReveald(true);
+            }
+        }
     }
 
 
