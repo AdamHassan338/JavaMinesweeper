@@ -84,6 +84,16 @@ public class Minesweeper {
 
     }
 
+    public void restart(){
+        gameEnd = false;
+        gameWon = false;
+        gameStart=false;
+        grid.populateGrid();
+        mousePos = new Raylib.Vector2();
+        if(consoleMode)
+            grid.draw(false);
+    }
+
 
     public void draw() {
 

@@ -67,8 +67,14 @@ public class GameController {
                 if(game.isGameWon())
                     System.out.println("YOU WON");
                 else
-                    System.out.println("YOU LOST");
-                System.exit(0);
+                    System.out.println("YOU LOST\n");
+                System.out.println("Do you want to play again? [Yes,No] :");
+                if(getYesNoInput())
+                    game.restart();
+                else {
+                    System.out.printf("GOOD BYE");
+                    System.exit(0);
+                }
             }
 
             System.out.println("");
@@ -78,8 +84,12 @@ public class GameController {
         }else{
             mousePos = GetMousePosition();
             game.setMousePos(mousePos);
-            if(game.isGameEnd())
+            if(game.isGameEnd()){
+                if(IsKeyPressed(KEY_R))
+                    game.restart();
                 return;
+            }
+
             cellIndex = game.pixelToGrid(mousePos);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 action = Minesweeper.Action.reveal;
@@ -102,6 +112,21 @@ public class GameController {
 
     }
 
+    private boolean getYesNoInput(){
+        while (true) {
+            String input = sc.nextLine();
+            switch (input.trim().toUpperCase()) {
+                case "YES", "Y":
+                    return true;
+                case "NO", "N":
+                    return false;
+                default:
+                    System.out.println("INVALID INPUT, ENTER YES OR NO");
+            }
+        }
+
+    }
+
     private Minesweeper.Action getAction(){
         while(true){
             System.out.println("");
@@ -109,9 +134,9 @@ public class GameController {
             String responce = sc.nextLine();
             System.out.println("");
             switch (responce.toUpperCase()){
-                case "R":
+                case "R","REVEAL":
                     return Minesweeper.Action.reveal;
-                case "F":
+                case "F","FLAG","TOGGLE FLAG":
                     if(!game.isGameStart()) {
                         System.out.println("FIRST MOVE MUST BE A REVEAL");
                         break;
