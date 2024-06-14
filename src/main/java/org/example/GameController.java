@@ -8,9 +8,11 @@ import static com.raylib.Raylib.*;
 
 public class GameController {
     private Minesweeper game;
+    private StartScreen startScreen;
     private Vector2 mousePos;
     private boolean enableUI;
     private Scanner sc;
+    private boolean onStart = true;
 
     public GameController(){
 
@@ -21,6 +23,7 @@ public class GameController {
         CellRenderer.init();
         CellRenderer.debugMode = false;
         game = new Minesweeper();
+        startScreen = new StartScreen("Minesweeper");
         game.init(cells, Minesweeper.Diffculty.easy);
         game.setConsoleMode(false);
         enableUI = true;
@@ -43,10 +46,17 @@ public class GameController {
         if (enableUI) {
             while (!WindowShouldClose()) {
                 processInput();
-                game.draw();
+                if(onStart) {
+                    startScreen.draw();
+                    startScreen.update();
+                }else{
+                    System.out.println("renering game now");
+                    game.draw();
+                }
             }
         }else{
             while(true) {
+
                 game.draw();
                 processInput();
 
@@ -85,6 +95,15 @@ public class GameController {
         }else{
             mousePos = GetMousePosition();
             game.setMousePos(mousePos);
+            startScreen.setMousePos(mousePos);
+            if(onStart){
+                if(startScreen.pressedButton == "Start"){
+                    onStart = false;
+                    System.out.println(startScreen.pressedButton);
+                }
+                return;
+            }
+
             if(game.isGameEnd()){
                 if(IsKeyPressed(KEY_R))
                     game.restart();

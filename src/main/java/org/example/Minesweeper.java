@@ -4,7 +4,7 @@ import com.raylib.Raylib;
 import static com.raylib.Jaylib.*;
 
 
-public class Minesweeper {
+public class Minesweeper extends Game {
     public enum Action{
         reveal,
         toggleFlag
@@ -20,7 +20,7 @@ public class Minesweeper {
     private int size;
     private boolean gameStart =false;
 
-    private boolean gameEnd;
+
     private boolean gameWon;
 
     private Diffculty diffculty;
@@ -104,7 +104,7 @@ public class Minesweeper {
             grid.draw(false);
     }
 
-
+    @Override
     public void draw() {
 
         if(consoleMode){
