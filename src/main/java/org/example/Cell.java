@@ -11,12 +11,20 @@ public class Cell {
     int x;
     int y;
 
-    int neigbours;
+    private int neigbours;
 
     public Cell(int x, int y,boolean isMined){
         this.isMined = isMined;
         this.x = x;
         this.y = y;
+    }
+
+    public int getNeigbours() {
+        return neigbours;
+    }
+
+    public void setNeigbours(int neigbours) {
+        this.neigbours = neigbours;
     }
 
     public boolean isMined() {

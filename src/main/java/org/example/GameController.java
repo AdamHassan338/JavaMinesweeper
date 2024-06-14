@@ -21,19 +21,20 @@ public class GameController {
         CellRenderer.init();
         CellRenderer.debugMode = false;
         game = new Minesweeper();
-        game.init(cells);
+        game.init(cells, Minesweeper.Diffculty.easy);
         game.setConsoleMode(false);
         enableUI = true;
 
     }
 
     public void init(int cells) {
+        sc=new Scanner(System.in);
         game = new Minesweeper();
-        game.init(cells);
+        game.init(cells,getDifficulty());
         game.setConsoleMode(true);
         enableUI = false;
 
-        sc=new Scanner(System.in);
+
 
 
     }
@@ -178,6 +179,25 @@ public class GameController {
                     System.out.println("RESPONSE INVALID");
                 }
 
+            }
+        }
+    }
+
+    private Minesweeper.Diffculty getDifficulty(){
+        while(true) {
+            System.out.println();
+            System.out.print("Enter the Difficulty -  Easy, Medium, Hard : ");
+            String responce = sc.nextLine();
+            responce = responce.trim().toUpperCase();
+            switch (responce) {
+                case "EASY", "E":
+                    return Minesweeper.Diffculty.easy;
+                case "MEDIUM", "M":
+                    return Minesweeper.Diffculty.medium;
+                case "Hard", "H":
+                    return Minesweeper.Diffculty.hard;
+                default:
+                    System.out.println("RESPONSE INVALID");
             }
         }
     }

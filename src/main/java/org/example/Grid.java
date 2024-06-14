@@ -38,7 +38,7 @@ public class Grid {
                 boolean hover = false;
                 if((x == (int) hoverIndex.x()) && (y == (int) hoverIndex.y()))
                     hover = true;
-                CellRenderer.drawCell(x, y, c.neigbours, c.isFlagged(), c.isReveald(), c.isMined(),hover);
+                CellRenderer.drawCell(x, y, c.getNeigbours(), c.isFlagged(), c.isReveald(), c.isMined(),hover);
 
             }
 
@@ -66,7 +66,7 @@ public class Grid {
                     if(c.isMined())
                         renderList[x+1]='M';
                     else
-                        renderList[x+1]= c.neigbours>0 ? (char) (c.neigbours + '0') : ' ';
+                        renderList[x+1]= c.getNeigbours()>0 ? (char) (c.getNeigbours() + '0') : ' ';
                 }
             }
             ConsoleRenderer.printRow(renderList);
@@ -75,22 +75,32 @@ public class Grid {
     }
 
 
-    public void populateGrid() {
+    public void populateGrid(Minesweeper.Diffculty diffculty) {
         cells = new Cell[rows][columns];
 
         double random;
+        double chance = 0;
+        switch (diffculty){
+            case easy:
+                chance = 10;
+                break;
+            case medium:
+                chance = 15;
+            case hard:
+                chance = 20;
+        }
 
 
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
                 random = Math.random() * 100;
-                cells[i][j] = new Cell(i,j,random < 20);
+                cells[i][j] = new Cell(i,j,random < chance);
             }
         }
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
 
-                cells[i][j].neigbours = calculateNeighbours(i, j);
+                cells[i][j].setNeigbours(calculateNeighbours(i, j));
             }
         }
 
@@ -156,7 +166,7 @@ public class Grid {
 
         cells[x][y].setReveald(true);
 
-        if (cells[x][y].neigbours > 0)
+        if (cells[x][y].getNeigbours() > 0)
             return;
 
 

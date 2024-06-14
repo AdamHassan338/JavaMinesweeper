@@ -9,12 +9,21 @@ public class Minesweeper {
         reveal,
         toggleFlag
     }
+
+    public enum Diffculty{
+        easy,
+        medium,
+        hard
+    }
+
     private  Raylib.Vector2 mousePos;
     private int size;
     private boolean gameStart =false;
 
     private boolean gameEnd;
     private boolean gameWon;
+
+    private Diffculty diffculty;
 
     private Grid grid;
 
@@ -71,14 +80,15 @@ public class Minesweeper {
     }
 
 
-    public void init(int cells) {
+    public void init(int cells,Diffculty diffculty) {
         grid = new Grid(cells,cells);
         size = GetScreenWidth() / cells;
         CellRenderer.spacing = size;
         gameEnd = false;
         gameWon = false;
         gameStart=false;
-        grid.populateGrid();
+        this.diffculty = diffculty;
+        grid.populateGrid(diffculty);
         mousePos = new Raylib.Vector2();
 
 
@@ -88,7 +98,7 @@ public class Minesweeper {
         gameEnd = false;
         gameWon = false;
         gameStart=false;
-        grid.populateGrid();
+        grid.populateGrid(diffculty);
         mousePos = new Raylib.Vector2();
         if(consoleMode)
             grid.draw(false);
@@ -142,7 +152,7 @@ public class Minesweeper {
                 if(!isGameStart()){
                     setGameStart(true);
                     if(grid.cellAt(x,y).isMined())
-                        grid.populateGrid();
+                        grid.populateGrid(diffculty);
                 }
 
                 if(!grid.revealCell(x,y)){
