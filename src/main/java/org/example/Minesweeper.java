@@ -1,5 +1,6 @@
 package org.example;
 
+import com.raylib.Jaylib;
 import com.raylib.Raylib;
 import static com.raylib.Jaylib.*;
 
@@ -160,6 +161,8 @@ public class Minesweeper extends Game {
 
             int textWidth = MeasureText(topText,textSize);
             int textWidth2 = MeasureText(bottomText,textSize);
+            //semi transparent overlay
+            DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(), new Jaylib.Color(0,0,0,150));
 
             DrawText(topText,(GetScreenWidth() - textWidth)/2,(GetScreenHeight()-textHeight)/2,textSize,textColour);
 
