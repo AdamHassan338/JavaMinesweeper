@@ -59,7 +59,7 @@ public class StartScreen extends Game{
             b.setState(Button.State.idle);
             if(CheckCollisionPointRec(mousePos,b.rect)){
                 b.setState(Button.State.hovered);
-                if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
                     pressedButton = b.getText();
             }
         }

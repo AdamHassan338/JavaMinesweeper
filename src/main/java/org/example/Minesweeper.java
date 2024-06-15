@@ -119,7 +119,6 @@ public class Minesweeper extends Game {
         startTime =0;
         endTime=0;
         duration =0;
-        System.out.println(diffculty);
         grid.populateGrid(diffculty);
         mousePos = new Raylib.Vector2();
         if(consoleMode)

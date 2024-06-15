@@ -131,12 +131,12 @@ public class GameController {
                 CellRenderer.debugMode = !CellRenderer.debugMode;
 
             cellIndex = game.pixelToGrid(mousePos);
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
                 action = Minesweeper.Action.reveal;
 
             }
 
-            if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+            if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
                 action = Minesweeper.Action.toggleFlag;
 
             }
