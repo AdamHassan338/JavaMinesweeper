@@ -12,18 +12,21 @@ import static com.raylib.Jaylib.*;
 
 public class Button {
 
+    enum State{
+        idle,
+        hovered
+    }
+
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public String getText() {
-        return text;
-    }
-
     private String text;
     Raylib.Color colour;
     int spacing = 1;
+
+    private State state;
 
     Raylib.Rectangle rect;
 
@@ -50,16 +53,49 @@ public class Button {
         rect.y(this.y);
         rect.width(width);
         rect.height(height);
+
+        state = State.idle;
     }
 
 
     public void draw(){
-        DrawRectangle(x , y , width, height , colour);
+
+        Raylib.Color brush = new Raylib.Color().r(colour.r()).g(colour.g()).b(colour.b()).a(colour.a());
+
+        if(state==State.hovered) {
+            tintColour(brush,0.5f);
+        }
+
+        DrawRectangle(x , y , width, height , brush);
         int textSize =20;
         int textWidth = MeasureText(text,textSize);
         int textX = x+(width-textWidth)/2;
         int textY = y+ (height-textSize)/2;
         DrawText(text,textX,textY,textSize,BLUE);
+
+    }
+
+    public String getText() {
+        return text;
+    }
+    public void setState(State state) {
+        this.state = state;
+    }
+
+
+
+    public static int mapByteTo255(byte x) {
+        return Math.min (x + 128,255);
+    }
+    public static byte map255ToByte(int x) {
+        return (byte) (x - 128);
+    }
+
+    private void tintColour(Raylib.Color c, float tint){
+
+        c.r(  map255ToByte((int) (mapByteTo255(c.r())*tint)));
+        c.g(  map255ToByte((int) (mapByteTo255(c.g())*tint)));
+        c.b(  map255ToByte((int) (mapByteTo255(c.b())*tint)));
 
     }
 

@@ -78,7 +78,6 @@ public class Grid {
     public void populateGrid(Minesweeper.Diffculty diffculty) {
         cells = new Cell[rows][columns];
 
-        double random;
         double chance = 0;
         switch (diffculty){
             case easy:
@@ -86,17 +85,24 @@ public class Grid {
                 break;
             case medium:
                 chance = 15;
+                break;
             case hard:
                 chance = 20;
         }
 
+        int count = 0;
+        int goal = (int) ((rows* columns)* (chance/100));
 
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
-                random = Math.random() * 100;
-                cells[i][j] = new Cell(i,j,random < chance);
+                cells[i][j] = new Cell(i,j,count < goal);
+                    count++;
             }
         }
+
+
+        shuffle();
+
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
 
@@ -104,6 +110,20 @@ public class Grid {
             }
         }
 
+    }
+
+    private void shuffle(){
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++)  {
+                int x = (int) (Math.random() * (columns));
+                int y = (int) (Math.random() * (rows));
+
+                Cell temp = cells[x][y];
+                cells[x][y]= cells[i][j];
+                cells[i][j] = temp;
+
+            }
+        }
     }
 
     private int calculateNeighbours(int i, int j) {

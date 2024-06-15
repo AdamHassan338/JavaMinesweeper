@@ -42,6 +42,10 @@ public class Minesweeper extends Game {
         return v;
     }
 
+    public void setDiffculty(Diffculty diffculty) {
+        this.diffculty = diffculty;
+    }
+
     public void setMousePos(Raylib.Vector2 mousePos) {
         this.mousePos = mousePos;
         grid.hoverIndex = pixelToGrid(mousePos);
@@ -98,6 +102,7 @@ public class Minesweeper extends Game {
         gameEnd = false;
         gameWon = false;
         gameStart=false;
+        System.out.println(diffculty);
         grid.populateGrid(diffculty);
         mousePos = new Raylib.Vector2();
         if(consoleMode)

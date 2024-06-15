@@ -1,7 +1,5 @@
 package org.example;
 
-import com.raylib.Raylib;
-
 import java.util.Scanner;
 
 import static com.raylib.Raylib.*;
@@ -12,7 +10,7 @@ public class GameController {
     private Vector2 mousePos;
     private boolean enableUI;
     private Scanner sc;
-    private boolean onStart = true;
+    private boolean onStartMenu = true;
 
     public GameController(){
 
@@ -23,8 +21,8 @@ public class GameController {
         CellRenderer.init();
         CellRenderer.debugMode = false;
         game = new Minesweeper();
+        game.init(10, Minesweeper.Diffculty.easy);
         startScreen = new StartScreen("Minesweeper");
-        game.init(cells, Minesweeper.Diffculty.easy);
         game.setConsoleMode(false);
         enableUI = true;
 
@@ -45,12 +43,13 @@ public class GameController {
     public void begin(){
         if (enableUI) {
             while (!WindowShouldClose()) {
-                processInput();
-                if(onStart) {
+
+                if(onStartMenu) {
+                    processInput();
                     startScreen.draw();
                     startScreen.update();
                 }else{
-                    System.out.println("renering game now");
+                    processInput();
                     game.draw();
                 }
             }
@@ -94,15 +93,32 @@ public class GameController {
 
         }else{
             mousePos = GetMousePosition();
-            game.setMousePos(mousePos);
-            startScreen.setMousePos(mousePos);
-            if(onStart){
-                if(startScreen.pressedButton == "Start"){
-                    onStart = false;
-                    System.out.println(startScreen.pressedButton);
+
+
+            if(onStartMenu){
+                startScreen.setMousePos(mousePos);
+
+                switch (startScreen.pressedButton){
+                    case "Easy":
+                        game.setDiffculty(Minesweeper.Diffculty.easy);
+                        game.restart();
+                        onStartMenu = false;
+                        break;
+                    case "Medium":
+                        game.setDiffculty(Minesweeper.Diffculty.medium);
+                        game.restart();
+                        onStartMenu = false;
+                        break;
+                    case "Hard":
+                        game.setDiffculty(Minesweeper.Diffculty.hard);
+                        game.restart();
+                        onStartMenu = false;
+                        break;
+
                 }
                 return;
             }
+            game.setMousePos(mousePos);
 
             if(game.isGameEnd()){
                 if(IsKeyPressed(KEY_R))
