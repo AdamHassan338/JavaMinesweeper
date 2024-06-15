@@ -16,7 +16,7 @@ public class Minesweeper extends Game {
         medium,
         hard
     }
-
+    static Texture mineTexture;
     private  Raylib.Vector2 mousePos;
     private int size;
     private boolean gameStart =false;
@@ -64,6 +64,9 @@ public class Minesweeper extends Game {
 
     public void setConsoleMode(boolean consoleMode) {
         this.consoleMode = consoleMode;
+        if(!consoleMode && mineTexture == null){
+            mineTexture = LoadTexture("Assets/mine.png");
+        }
     }
 
 
@@ -139,12 +142,19 @@ public class Minesweeper extends Game {
         int textSize = 200;
         int textHeight = textSize*2;
         int timeWidth = MeasureText(String.valueOf(duration/1000),50);
+        int minesWidth = MeasureText(String.valueOf(grid.getNumberMines()),50);
         Raylib.Color textColour = RED;
         rlClearScreenBuffers();
         BeginDrawing();
             ClearBackground(LIGHTGRAY);
+            //bottom
+            DrawRectangle(0,725,GetScreenWidth(),75,LIGHTGRAY);
+
             grid.draw(true);
+
             DrawText(String.valueOf(duration/1000),(GetScreenWidth()-timeWidth)/2,725 +(75-50)/2,50,BLACK);
+            DrawText(String.valueOf(grid.getNumberMines()),(GetScreenWidth()-minesWidth)/8 -(mineTexture.width()),725 +(75-50)/2,50,BLACK);
+            DrawTexture(mineTexture,(GetScreenWidth()/8) +(mineTexture.width())/2,725 +(75-mineTexture.height())/2,WHITE);
 
         if(gameEnd) {
             textColour = RED;

@@ -8,6 +8,7 @@ public class Grid {
     private int columns;
     private Cell[][] cells;
     Raylib.Vector2 hoverIndex;
+    private int numberMines = 0;
 
     public Grid(int rows, int columns){
         this.columns = columns;
@@ -20,6 +21,10 @@ public class Grid {
 
     public int getColumns() {
         return columns;
+    }
+
+    public int getNumberMines() {
+        return numberMines;
     }
 
     public void draw(boolean drawWindowed) {
@@ -91,11 +96,11 @@ public class Grid {
         }
 
         int count = 0;
-        int goal = (int) ((rows* columns)* (chance/100));
+        numberMines = (int) ((rows* columns)* (chance/100));
 
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
-                cells[i][j] = new Cell(i,j,count < goal);
+                cells[i][j] = new Cell(i,j,count < numberMines);
                     count++;
             }
         }
@@ -185,6 +190,7 @@ public class Grid {
             return;
 
         cells[x][y].setReveald(true);
+        cells[x][y].setFlagged(false);
 
         if (cells[x][y].getNeigbours() > 0)
             return;

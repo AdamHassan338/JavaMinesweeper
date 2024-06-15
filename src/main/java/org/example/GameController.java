@@ -127,6 +127,9 @@ public class GameController {
                 return;
             }
 
+            if(IsKeyPressed(KEY_INSERT))
+                CellRenderer.debugMode = !CellRenderer.debugMode;
+
             cellIndex = game.pixelToGrid(mousePos);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 action = Minesweeper.Action.reveal;
