@@ -78,6 +78,7 @@ public class GameController {
                     System.out.println("YOU WON");
                 else
                     System.out.println("YOU LOST\n");
+                System.out.println("Game lasted " + game.getDuration()/1000 + " seconds.\n");
                 System.out.println("Do you want to play again? [Yes,No] :");
                 if(getYesNoInput())
                     game.restart();

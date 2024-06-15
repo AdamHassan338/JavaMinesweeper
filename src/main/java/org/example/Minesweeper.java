@@ -31,6 +31,10 @@ public class Minesweeper extends Game {
 
     public static final String name = "Minesweeper";
 
+    private long startTime =0;
+    private long endTime =0;
+    private long duration = 0;
+
 
     public Minesweeper() {
     }
@@ -50,6 +54,10 @@ public class Minesweeper extends Game {
         this.mousePos = mousePos;
         grid.hoverIndex = pixelToGrid(mousePos);
 
+    }
+
+    public long getDuration() {
+        return duration;
     }
 
 
@@ -81,6 +89,8 @@ public class Minesweeper extends Game {
         if(win)
             gameWon = true;
         gameEnd = true;
+        endTime = System.currentTimeMillis();
+        duration = (endTime-startTime);
     }
 
 
@@ -156,6 +166,7 @@ public class Minesweeper extends Game {
             case reveal:
                 if(!isGameStart()){
                     setGameStart(true);
+                    startTime = System.currentTimeMillis();
                     if(grid.cellAt(x,y).isMined())
                         grid.populateGrid(diffculty);
                 }
