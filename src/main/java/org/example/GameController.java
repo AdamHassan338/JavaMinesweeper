@@ -229,7 +229,7 @@ public class GameController {
                     return Minesweeper.Diffculty.easy;
                 case "MEDIUM", "M":
                     return Minesweeper.Diffculty.medium;
-                case "Hard", "H":
+                case "HARD", "H":
                     return Minesweeper.Diffculty.hard;
                 default:
                     System.out.println("RESPONSE INVALID");
