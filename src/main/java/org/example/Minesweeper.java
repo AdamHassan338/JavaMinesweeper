@@ -96,7 +96,7 @@ public class Minesweeper extends Game {
 
     public void init(int cells,Diffculty diffculty) {
         grid = new Grid(cells,cells);
-        size = GetScreenWidth() / cells;
+        size = (int)(GetScreenHeight()-75) / cells;
         CellRenderer.spacing = size;
         gameEnd = false;
         gameWon = false;
@@ -112,6 +112,9 @@ public class Minesweeper extends Game {
         gameEnd = false;
         gameWon = false;
         gameStart=false;
+        startTime =0;
+        endTime=0;
+        duration =0;
         System.out.println(diffculty);
         grid.populateGrid(diffculty);
         mousePos = new Raylib.Vector2();
@@ -127,13 +130,20 @@ public class Minesweeper extends Game {
             return;
         }
 
+        if(gameStart && !gameEnd){
+            endTime = System.currentTimeMillis();
+            duration = (endTime-startTime);
+        }
+
         int textSize = 200;
         int textHeight = textSize*2;
+        int timeWidth = MeasureText(String.valueOf(duration/1000),50);
         Raylib.Color textColour = RED;
         rlClearScreenBuffers();
         BeginDrawing();
-
+            ClearBackground(LIGHTGRAY);
             grid.draw(true);
+            DrawText(String.valueOf(duration/1000),(GetScreenWidth()-timeWidth)/2,725 +(75-50)/2,50,BLACK);
 
         if(gameEnd) {
             textColour = RED;

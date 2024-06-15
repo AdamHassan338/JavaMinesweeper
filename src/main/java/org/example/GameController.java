@@ -21,7 +21,7 @@ public class GameController {
         CellRenderer.init();
         CellRenderer.debugMode = false;
         game = new Minesweeper();
-        game.init(10, Minesweeper.Diffculty.easy);
+        game.init(cells, Minesweeper.Diffculty.easy);
         startScreen = new StartScreen("Minesweeper");
         game.setConsoleMode(false);
         enableUI = true;
