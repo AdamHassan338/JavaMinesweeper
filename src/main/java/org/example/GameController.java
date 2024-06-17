@@ -204,9 +204,7 @@ public class GameController {
                 try {
                     int x = Integer.parseInt(coords[0].trim());
                     int y = Integer.parseInt(coords[1].trim());
-                    if (x < 0 || y < 0) {
-                        System.out.println("RESPONSE INVALID, NEGATIVE NUMBER");
-                    }else if(x>=game.getGridDimentions().x() || y >= game.getGridDimentions().y()){
+                    if (!game.isInGrid(x,y)) {
                         System.out.println("RESPONSE INVALID, COORDINATES NOT ON GRID");
                     }else {
                         Vector2 v = new Vector2();

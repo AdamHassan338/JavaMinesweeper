@@ -27,6 +27,13 @@ public class Grid {
         return numberMines;
     }
 
+    public boolean isValidCoordinate(int x, int y){
+            if(x<0  || y<0 || x >=columns || y>=rows){
+                return false;
+            }
+            return true;
+    }
+
     public void draw(boolean drawWindowed) {
         if(drawWindowed)
             drawWindow();
@@ -93,6 +100,7 @@ public class Grid {
                 break;
             case hard:
                 chance = 20;
+                break;
         }
 
         int count = 0;
@@ -145,7 +153,7 @@ public class Grid {
         return count;
     }
 
-    //return false on a mine
+    //return false on a mine returns true if cell is flagged on not mined
     public boolean revealCell(int x, int y) {
         Cell c = cells[x][y];
         if (!c.isMined() && !c.isReveald() && !c.isFlagged())

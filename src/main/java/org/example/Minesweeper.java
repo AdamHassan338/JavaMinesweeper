@@ -47,6 +47,10 @@ public class Minesweeper extends Game {
         return v;
     }
 
+    public boolean isInGrid(int x, int y){
+        return grid.isValidCoordinate(x,y);
+    }
+
     public void setDiffculty(Diffculty diffculty) {
         this.diffculty = diffculty;
     }
