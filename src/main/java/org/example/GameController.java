@@ -143,7 +143,7 @@ public class GameController {
         }
 
         try{
-            game.intertactGrid((int) cellIndex.x(), (int) cellIndex.y(), action);
+            game.interactGrid((int) cellIndex.x(), (int) cellIndex.y(), action);
         }catch (Exception e){
             //action is uninitalised for the first game loop when in Window mode
             //do nothing is fine

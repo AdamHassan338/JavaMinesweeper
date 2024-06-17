@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e365e0bb-e743-4842-a9e7-11542efd6eea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/minesweeper/GridTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Grid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Grid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Minesweeper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Minesweeper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/minesweeper/MinesweeperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/minesweeper/MinesweeperTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +42,8 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "JUnit.GridTest.executor": "Run",
+    "JUnit.GridTest.isCellsLeftShouldReturnTrueIfThereAreCellsNotReveled.executor": "Run",
+    "JUnit.MinesweeperTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
@@ -93,6 +93,9 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/JavaMinesweeper$MinesweeperTest.ic" NAME="MinesweeperTest Coverage Results" MODIFIED="1718632097382" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>org.example.minesweeper.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/JavaMinesweeper$GridTest.ic" NAME="GridTest Coverage Results" MODIFIED="1718618600259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
       <FILTER>org.example.minesweeper.*</FILTER>
     </SUITE>

@@ -61,6 +61,10 @@ public class Minesweeper extends Game {
 
     }
 
+    public void setGrid(Grid newGrid){
+        grid = newGrid;
+    }
+
     public long getDuration() {
         return duration;
     }
@@ -93,7 +97,7 @@ public class Minesweeper extends Game {
     }
 
 
-    public void endGame(boolean win){
+    private void endGame(boolean win){
         if(win)
             gameWon = true;
         gameEnd = true;
@@ -187,14 +191,18 @@ public class Minesweeper extends Game {
         EndDrawing();
     }
 
-    public void intertactGrid(int x, int y, Action action){
+    public void interactGrid(int x, int y, Action action){
         switch (action){
             case reveal:
                 if(!isGameStart()){
                     setGameStart(true);
                     startTime = System.currentTimeMillis();
-                    if(grid.cellAt(x,y).isMined())
-                        grid.populateGrid(diffculty);
+                    if(grid.cellAt(x,y).isMined()){
+                        while(!grid.revealCell(x,y)){
+                            grid.populateGrid(diffculty);
+                        }
+                    }
+
                 }
 
                 if(!grid.revealCell(x,y)){
